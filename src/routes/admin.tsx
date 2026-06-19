@@ -1,21 +1,18 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
 import { api } from "@/services/api";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Sowwise365" }] }),
+  beforeLoad: () => {
+    if (typeof window !== "undefined" && !api.isAuthed()) {
+      throw redirect({ to: "/admin-login" });
+    }
+  },
   component: AdminLayout,
 });
 
 function AdminLayout() {
-  const navigate = useNavigate();
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    if (!api.isAuthed()) navigate({ to: "/admin-login" });
-    else setReady(true);
-  }, [navigate]);
-  if (!ready) return null;
   return (
     <div className="flex min-h-screen bg-secondary/30">
       <AdminSidebar />
