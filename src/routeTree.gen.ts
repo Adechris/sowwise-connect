@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminRegistrationsRouteImport } from './routes/admin.registrations'
 import { Route as AdminEmailsRouteImport } from './routes/admin.emails'
+import { Route as AdminCoursesRouteImport } from './routes/admin.courses'
 
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
@@ -46,11 +47,17 @@ const AdminEmailsRoute = AdminEmailsRouteImport.update({
   path: '/emails',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCoursesRoute = AdminCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
+  '/admin/courses': typeof AdminCoursesRoute
   '/admin/emails': typeof AdminEmailsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/': typeof AdminIndexRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
+  '/admin/courses': typeof AdminCoursesRoute
   '/admin/emails': typeof AdminEmailsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin': typeof AdminIndexRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
+  '/admin/courses': typeof AdminCoursesRoute
   '/admin/emails': typeof AdminEmailsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/': typeof AdminIndexRoute
@@ -77,16 +86,24 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin-login'
+    | '/admin/courses'
     | '/admin/emails'
     | '/admin/registrations'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin-login' | '/admin/emails' | '/admin/registrations' | '/admin'
+  to:
+    | '/'
+    | '/admin-login'
+    | '/admin/courses'
+    | '/admin/emails'
+    | '/admin/registrations'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/admin-login'
+    | '/admin/courses'
     | '/admin/emails'
     | '/admin/registrations'
     | '/admin/'
@@ -142,16 +159,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEmailsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/courses': {
+      id: '/admin/courses'
+      path: '/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AdminCoursesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminCoursesRoute: typeof AdminCoursesRoute
   AdminEmailsRoute: typeof AdminEmailsRoute
   AdminRegistrationsRoute: typeof AdminRegistrationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCoursesRoute: AdminCoursesRoute,
   AdminEmailsRoute: AdminEmailsRoute,
   AdminRegistrationsRoute: AdminRegistrationsRoute,
   AdminIndexRoute: AdminIndexRoute,
