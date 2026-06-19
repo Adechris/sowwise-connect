@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminRegistrationsRouteImport } from './routes/admin.registrations'
+import { Route as AdminEmailsRouteImport } from './routes/admin.emails'
 
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin-login',
@@ -40,17 +41,24 @@ const AdminRegistrationsRoute = AdminRegistrationsRouteImport.update({
   path: '/registrations',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEmailsRoute = AdminEmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -68,15 +77,17 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin-login'
+    | '/admin/emails'
     | '/admin/registrations'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin-login' | '/admin/registrations' | '/admin'
+  to: '/' | '/admin-login' | '/admin/emails' | '/admin/registrations' | '/admin'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/admin-login'
+    | '/admin/emails'
     | '/admin/registrations'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -124,15 +135,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRegistrationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/emails': {
+      id: '/admin/emails'
+      path: '/emails'
+      fullPath: '/admin/emails'
+      preLoaderRoute: typeof AdminEmailsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminEmailsRoute: typeof AdminEmailsRoute
   AdminRegistrationsRoute: typeof AdminRegistrationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminEmailsRoute: AdminEmailsRoute,
   AdminRegistrationsRoute: AdminRegistrationsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
