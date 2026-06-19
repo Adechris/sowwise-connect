@@ -10,16 +10,21 @@ export const Route = createFileRoute("/admin")({
 
 function AdminLayout() {
   const navigate = useNavigate();
-  const [ready, setReady] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [authed, setAuthed] = useState(false);
   useEffect(() => {
-    if (!api.isAuthed()) {
-      navigate({ to: "/admin-login" });
-    } else {
-      setReady(true);
-    }
+    const ok = api.isAuthed();
+    setAuthed(ok);
+    setChecked(true);
+    if (!ok) navigate({ to: "/admin-login" });
   }, [navigate]);
-  if (typeof window === "undefined") return null;
-  if (!ready) return null;
+  if (!checked || !authed) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-secondary/30 text-sm text-muted-foreground">
+        Loading…
+      </div>
+    );
+  }
   return (
     <div className="flex min-h-screen bg-secondary/30">
       <AdminSidebar />
