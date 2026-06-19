@@ -12,9 +12,13 @@ function AdminLayout() {
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    if (!api.isAuthed()) navigate({ to: "/admin-login" });
-    else setReady(true);
+    if (!api.isAuthed()) {
+      navigate({ to: "/admin-login" });
+    } else {
+      setReady(true);
+    }
   }, [navigate]);
+  if (typeof window === "undefined") return null;
   if (!ready) return null;
   return (
     <div className="flex min-h-screen bg-secondary/30">
